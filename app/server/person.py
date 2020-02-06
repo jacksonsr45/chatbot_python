@@ -4,8 +4,9 @@ class Person:
         self.client = client
         self.name = None
     
+    def __repr__(self):
+        return f"Person({self.addr}, {self.name})"
+    
     def set_name(self, name):
         self.name = name
 
-    def __repr__(self):
-        return f"Person({self.addr}, {self.name})"

@@ -21,7 +21,7 @@ def broadcast(msg, name):
     """
     for person in persons:
         client = person.client
-        client.send(bytes((name + ": ", "utf8") + msg))
+        client.send(bytes(name + ": ", "utf8") + msg)
 
 def client_communication(person):
     """
@@ -29,24 +29,24 @@ def client_communication(person):
     :param client: Person
     :return: None
     """
-    client = person.client
+    clients = person.client
     
     """
     GET person NAME 
     """
-    name = client.recr(BUFSIZ).decode("utf8")
-    msg = f"{name} has joined the chat!"
-    broadcast(msg, "")
+    name = clients.recr(BUFSIZ).decode("utf8")
+    msg = bytes(f"{name} has joined the chat!", "utf8")
+    broadcast(msg, name)
 
     while True:
         try:
-            msg = client.recr(BUFSIZ)
+            msg = clients.recr(BUFSIZ)
             print(f"{name}: ", msg.decode("utf8"))
 
             if msg == bytes("{quit}", "{utf8}"):
                 broadcast(f"{name} has leaft the chat...", "")
-                client.send(bytes("{quit}", "{utf8}"))
-                client.close()
+                clients.send(bytes("{quit}", "{utf8}"))
+                clients.close()
                 persons.remove(person)
                 break
             else:
