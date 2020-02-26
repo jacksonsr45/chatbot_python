@@ -14,12 +14,11 @@ setup(
         'teste',
    ],  #same as name
    install_requires=[
-        'chatterbot',
         'chatterbot_corpus',
-        'socket',
-        'select',
-        'errno',], #external packages as dependencies
+        'chatterbot',
+        'setuptools',
+        ], #external packages as dependencies
    scripts=[
-       
+
            ]
 )
