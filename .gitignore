@@ -1,1 +1,9 @@
 venv/
+dist/
+chatbot_python.egg-info/*.txt
+build/
+app/website/
+.vscode/
+
+*.sqlite3
+*.pickle
