@@ -7,45 +7,48 @@ from app.config import conn
 
 class Client:
     def __init__(self):
-        HEADER_LENGTH = conn['HEADER_LENGTH']
-        IP = conn['IP']
-        PORT = conn['PORT']
+        self.HEADER_LENGTH = conn['HEADER_LENGTH']
+        self.IP = conn['IP']
+        self.PORT = conn['PORT']
 
-        my_username = input('Username: ')
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect((IP, PORT))
-        client_socket.setblocking(False)
+        self.my_username = input('Username: ')
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect((self.IP, self.PORT))
+        self.client_socket.setblocking(False)
 
-        username = my_username.encode("utf-8")
-        username_header =f"{len(username):<{HEADER_LENGTH}}".encode("utf-8")
-        teste = client_socket.send(username_header + username)
+        self.username = my_username.encode("utf-8")
+        self.username_header =f"{len(self.username):<{HEADER_LENGTH}}".encode("utf-8")
+        self.teste = self.client_socket.send(self.username_header + self.username)
 
-
+        self.__run_client()
+        
+        
+    def __run_client(self):
         while True:
-            #message = ""
-            message = input(f"{my_username} > ")
 
-            if message:
-                message = message.encode("utf-8")
-                message_header = f"{len(message):<{HEADER_LENGTH}}".encode("utf-8")
-                client_socket.send(message_header + message)
+            self.message = input(f"{self.my_username} > ")
+
+            if self.message:
+                self.message = self.message.encode("utf-8")
+                self.message_header = f"{len(self.message):<{HEADER_LENGTH}}".encode("utf-8")
+                self.client_socket.send(self.message_header + self.message)
 
             try:
                 while True:
-                    username_header = client_socket.recv(HEADER_LENGTH)
+                    self.username_header = self.client_socket.recv(self.HEADER_LENGTH)
                     
-                    if not len(username_header):
+                    if not len(self.username_header):
                         print("connection close by the server")
                         sys.exit()
                     
-                    username_length = int(username_header.decode("utf-8").strip())
-                    username = client_socket.recv(username_length).decode("utf-8")
+                    self.username_length = int(self.username_header.decode("utf-8").strip())
+                    self.username = self.client_socket.recv(self.username_length).decode("utf-8")
 
-                    message_header = client_socket.recv(HEADER_LENGTH)
-                    message_length = int(message_header.decode("utf-8").strip())
-                    message = client_socket.recv(message_length).decode("utf-8")
+                    self.message_header = self.client_socket.recv(self.HEADER_LENGTH)
+                    self.message_length = int(self.message_header.decode("utf-8").strip())
+                    self.message = self.client_socket.recv(self.message_length).decode("utf-8")
 
-                    print(f"{username} > {message}") 
+                    print(f"{self.username} > {self.message}") 
 
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:

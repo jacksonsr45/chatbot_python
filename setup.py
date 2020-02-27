@@ -18,6 +18,7 @@ setup(
         'chatterbot_corpus',
         'setuptools',
         'source',
+        #'awscli',
         'aws-sam-cli',
         ], #external packages as dependencies
    scripts=[
