@@ -49,21 +49,24 @@ class Chat_Bot:
 
                     message_header = client_socket.recv(HEADER_LENGTH)
                     message_length = int(message_header.decode("utf-8").strip())
-                    message = client_socket.recv(message_length).decode("utf-8")
+                    recv_message = client_socket.recv(message_length).decode("utf-8")
 
-                    print(f"{username} > {message}") 
+                    print(f"{username} > {recv_message}") 
 
                     # bot get messagem and generate a message    
-                    user_input = message
+                    user_input = recv_message
                     bot_response = bot.get_response(user_input)
 
                     # Receive by client and send message from cliente 
                     value = f"{bot_response}"
-                    message = value.encode("utf-8")
-                    message_header = f"{len(message):<{HEADER_LENGTH}}".encode("utf-8")
-                    client_socket.send(message_header + message)
+                    recv_message = value.encode("utf-8")
+                    message_header = f"{len(recv_message):<{HEADER_LENGTH}}".encode("utf-8")
+                    client_socket.send(message_header + recv_message)
 
-                    print(message.decode("utf-8"))
+                    self.__set_display_message(username, recv_message)         
+
+                    self.return_message()
+
 
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
@@ -74,3 +77,16 @@ class Chat_Bot:
             except Exception as e:
                 print('General erron', str(e))
                 sys.exit()
+
+    
+
+    def __set_display_message(self, username, message):
+        self.display_message = f"{username} > {message}"
+        return self.display_message
+
+
+
+    def return_message(self):
+        message = self.display_message
+        print(self.display_message)
+        return message
