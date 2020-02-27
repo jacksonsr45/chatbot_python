@@ -65,7 +65,6 @@ class Chat_Bot:
 
                     self.__set_display_message(username, recv_message)         
 
-                    self.return_message()
 
 
             except IOError as e:
