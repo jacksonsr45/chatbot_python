@@ -67,6 +67,7 @@ class Chat_Bot:
 
 
 
+
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
                     print('Reading error', str(e))
