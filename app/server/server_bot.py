@@ -31,8 +31,8 @@ class Server:
 
             for notified_socket in read_sockets:
                 if notified_socket == self.server_socket:
-                    self.client_socket, self.client_address = self.server_socket.accept()
-                    self.user = self.receive_message(self.client_socket)
+                    client_socket, client_address = self.server_socket.accept()
+                    self.user = self.receive_message(client_socket)
 
                     if self.user is False:
                         continue

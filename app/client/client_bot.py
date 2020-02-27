@@ -10,29 +10,36 @@ class Client:
         self.HEADER_LENGTH = conn['HEADER_LENGTH']
         self.IP = conn['IP']
         self.PORT = conn['PORT']
+        self.display_message = ""
+
 
         self.my_username = input('Username: ')
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((self.IP, self.PORT))
         self.client_socket.setblocking(False)
 
-        self.username = my_username.encode("utf-8")
-        self.username_header =f"{len(self.username):<{HEADER_LENGTH}}".encode("utf-8")
+        self.username = self.my_username.encode("utf-8")
+        self.username_header =f"{len(self.username):<{self.HEADER_LENGTH}}".encode("utf-8")
         self.teste = self.client_socket.send(self.username_header + self.username)
 
-        self.__run_client()
         
         
-    def __run_client(self):
+    
+    def __send_message__(self):
         while True:
 
             self.message = input(f"{self.my_username} > ")
 
             if self.message:
                 self.message = self.message.encode("utf-8")
-                self.message_header = f"{len(self.message):<{HEADER_LENGTH}}".encode("utf-8")
+                self.message_header = f"{len(self.message):<{self.HEADER_LENGTH}}".encode("utf-8")
                 self.client_socket.send(self.message_header + self.message)
 
+    
+    
+    
+    def __recv_message__(self):
+        while True:
             try:
                 while True:
                     self.username_header = self.client_socket.recv(self.HEADER_LENGTH)
@@ -48,7 +55,7 @@ class Client:
                     self.message_length = int(self.message_header.decode("utf-8").strip())
                     self.message = self.client_socket.recv(self.message_length).decode("utf-8")
 
-                    print(f"{self.username} > {self.message}") 
+                    self.__get_message(self.username, self.massage)         
 
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
@@ -59,4 +66,17 @@ class Client:
             except Exception as e:
                 print('General erron', str(e))
                 sys.exit()
-            
+
+
+
+    def __get_message(self, username, massage):
+        self.display_message = f"{username} > {message}"
+        return self.display_message
+
+
+
+    def return_message(self):
+        message = self.display_message
+        print(self.display_message)
+        return message
+        
