@@ -6,6 +6,8 @@ import sys
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from app.config import conn
+from app.config import cst
+from app.config import name_bot
 
 class Chat_Bot:
     def __init__(self):
@@ -13,17 +15,16 @@ class Chat_Bot:
         IP = conn['IP']
         PORT = conn['PORT']
 
-
+        # config the chatterbot
         bot = ChatBot('Chatbot 1')
         trainers = ListTrainer(bot)
-
-        conversation = [
-            'helo',
-        ]
-
+        conversation = cst
         trainers.train(conversation)
 
-        my_username = "Chatbot 1"
+        # Name from bot
+        my_username = name_bot['name']
+
+        # Config fron socket 
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect((IP, PORT))
         client_socket.setblocking(False)
@@ -34,14 +35,6 @@ class Chat_Bot:
 
 
         while True:
-            #message = ""
-            message = input(f"{my_username} > ")
-
-            if message:
-                message = bot.get_response(query)
-                message_header = f"{len(message):<{HEADER_LENGTH}}".encode("utf-8")
-                client_socket.send(message_header + message)
-
             try:
                 while True:
                     username_header = client_socket.recv(HEADER_LENGTH)
@@ -50,6 +43,7 @@ class Chat_Bot:
                         print("connection close by the server")
                         sys.exit()
                     
+                    # Get message by cliente by socket 
                     username_length = int(username_header.decode("utf-8").strip())
                     username = client_socket.recv(username_length).decode("utf-8")
 
@@ -58,6 +52,18 @@ class Chat_Bot:
                     message = client_socket.recv(message_length).decode("utf-8")
 
                     print(f"{username} > {message}") 
+
+                    # bot get messagem and generate a message    
+                    user_input = message
+                    bot_response = bot.get_response(user_input)
+
+                    # Receive by client and send message from cliente 
+                    value = f"{bot_response}"
+                    message = value.encode("utf-8")
+                    message_header = f"{len(message):<{HEADER_LENGTH}}".encode("utf-8")
+                    client_socket.send(message_header + message)
+
+                    print(message.decode("utf-8"))
 
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
@@ -68,4 +74,3 @@ class Chat_Bot:
             except Exception as e:
                 print('General erron', str(e))
                 sys.exit()
-Chat_Bot()

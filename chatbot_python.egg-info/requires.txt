@@ -1,3 +1,4 @@
-chatterbot_corpus
-chatterbot
-setuptools
+socket
+select
+errno
+sys

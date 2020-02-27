@@ -3,3 +3,14 @@ conn = {
     'IP': '0.0.0.0',
     'PORT': 8000,
 }
+
+
+name_bot = {
+    'name': 'Chat Bot 1',
+}
+
+cst = [
+    "Hi, can I help you?",
+    "Sure, I'd like to book a flight to Iceland.",
+    "Your flight has been booked.",
+]
