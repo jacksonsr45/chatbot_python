@@ -1,5 +1,5 @@
 chatterbot
 chatterbot_corpus
-socket
-select
-errno
+setuptools
+source
+aws-sam-cli

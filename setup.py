@@ -16,9 +16,10 @@ setup(
    install_requires=[
         'chatterbot',
         'chatterbot_corpus',
-        'socket',
-        'select',
-        'errno',], #external packages as dependencies
+        'setuptools',
+        'source',
+        'aws-sam-cli',
+        ], #external packages as dependencies
    scripts=[
        
            ]
