@@ -1,4 +1,5 @@
+chatterbot
+chatterbot_corpus
 socket
 select
 errno
-sys

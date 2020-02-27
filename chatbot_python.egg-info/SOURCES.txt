@@ -7,5 +7,6 @@ chatbot_python.egg-info/SOURCES.txt
 chatbot_python.egg-info/dependency_links.txt
 chatbot_python.egg-info/requires.txt
 chatbot_python.egg-info/top_level.txt
+teste/teste_bot.py
 teste/teste_cliente.py
 teste/teste_server.py
