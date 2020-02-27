@@ -32,12 +32,12 @@ class Client:
 
             self.message = input(f"{self.my_username} > ")
 
+            if self.message:
             
-            self.message = self.message.encode("utf-8")
-            self.message_header = f"{len(self.message):<{self.HEADER_LENGTH}}".encode("utf-8")
-            self.client_socket.send(self.message_header + self.message)
+                self.message = self.message.encode("utf-8")
+                self.message_header = f"{len(self.message):<{self.HEADER_LENGTH}}".encode("utf-8")
+                self.client_socket.send(self.message_header + self.message)
 
-            print(self.message_header + self.message)
 
     
     def __recv_message__(self):
@@ -57,9 +57,9 @@ class Client:
                     self.message_length = int(self.message_header.decode("utf-8").strip())
                     self.recv_message = self.client_socket.recv(self.message_length).decode("utf-8")
 
-                    self.__get_message(self.username, self.recv_message)         
+                    self.__set_display_message(self.username, self.recv_message)         
 
-                    print(self.display_message)
+                    self.return_message()
 
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
@@ -73,8 +73,7 @@ class Client:
 
 
 
-
-    def __get_message(self, username, message):
+    def __set_display_message(self, username, message):
         self.display_message = f"{username} > {message}"
         return self.display_message
 
@@ -84,4 +83,3 @@ class Client:
         message = self.display_message
         print(self.display_message)
         return message
-        
