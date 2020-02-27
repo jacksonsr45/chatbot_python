@@ -5,6 +5,10 @@ conn = {
 }
 
 
+username = {
+    'name': "Jackson",
+}
+
 name_bot = {
     'name': 'Chat Bot 1',
 }

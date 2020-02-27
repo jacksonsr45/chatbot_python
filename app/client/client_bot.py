@@ -4,6 +4,8 @@ import select
 import errno
 import sys
 from app.config import conn
+from app.config import username
+
 
 class Client:
     def __init__(self):
@@ -12,8 +14,8 @@ class Client:
         self.PORT = conn['PORT']
         self.display_message = ""
 
+        self.my_username = username['name']
 
-        self.my_username = input('Username: ')
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((self.IP, self.PORT))
         self.client_socket.setblocking(False)
@@ -30,13 +32,13 @@ class Client:
 
             self.message = input(f"{self.my_username} > ")
 
-            if self.message:
-                self.message = self.message.encode("utf-8")
-                self.message_header = f"{len(self.message):<{self.HEADER_LENGTH}}".encode("utf-8")
-                self.client_socket.send(self.message_header + self.message)
+            
+            self.message = self.message.encode("utf-8")
+            self.message_header = f"{len(self.message):<{self.HEADER_LENGTH}}".encode("utf-8")
+            self.client_socket.send(self.message_header + self.message)
 
-    
-    
+            print(self.message_header + self.message)
+
     
     def __recv_message__(self):
         while True:
@@ -53,9 +55,11 @@ class Client:
 
                     self.message_header = self.client_socket.recv(self.HEADER_LENGTH)
                     self.message_length = int(self.message_header.decode("utf-8").strip())
-                    self.message = self.client_socket.recv(self.message_length).decode("utf-8")
+                    self.recv_message = self.client_socket.recv(self.message_length).decode("utf-8")
 
-                    self.__get_message(self.username, self.massage)         
+                    self.__get_message(self.username, self.recv_message)         
+
+                    print(self.display_message)
 
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
@@ -69,7 +73,8 @@ class Client:
 
 
 
-    def __get_message(self, username, massage):
+
+    def __get_message(self, username, message):
         self.display_message = f"{username} > {message}"
         return self.display_message
 
